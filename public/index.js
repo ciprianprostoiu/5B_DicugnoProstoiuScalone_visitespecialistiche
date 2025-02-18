@@ -9,6 +9,7 @@ import {tableComponent} from './componenti/table.js';
 import {NavBarComponent} from './componenti/navbar.js';
 import {createForm} from './componenti/form.js';
 import {generateFetchComponent} from './componenti/fetch_component.js';
+import { createMiddleware } from './componenti/middleware.js';
 
 
 fetch("conf.json").then(r => r.json()).then(conf => {
