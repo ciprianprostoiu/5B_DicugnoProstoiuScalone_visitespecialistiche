@@ -15,7 +15,7 @@ app.post("/insert", async (req, res) => {
     res.status(500).json({result: "ko"});
   }
 })
-app.get('/accidents', async (req, res) => {
+app.get('/booking', async (req, res) => {
     const list = await database.select();
     res.json(list);
 });
