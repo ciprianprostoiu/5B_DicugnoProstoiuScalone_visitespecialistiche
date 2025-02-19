@@ -20,33 +20,33 @@ const executeQuery = (sql) => {
 }
 
 const database = {
-   createTable: async () => {
+   createTable: async () => {//faccio prima type
       await executeQuery(`
-         CREATE TABLE IF NOT EXISTS accident (
-         id INT PRIMARY KEY AUTO_INCREMENT,
-         address varchar(255) NOT NULL,
-         date DATE NOT NULL,
-         time TIME NOT NULL,
-         injured int NOT NULL,
-         dead int NOT NULL)             
+         CREATE TABLE IF NOT EXISTS type (
+            id INT PRIMARY KEY AUTO_INCREMENT,
+            name VARCHAR(20) NOT NULL
+         )
       `);
       return await executeQuery(`
-         CREATE TABLE IF NOT EXISTS plates (
+         CREATE TABLE IF NOT EXISTS booking (
             id INT PRIMARY KEY AUTO_INCREMENT,
-            plate VARCHAR(20) NOT NULL,
-            idAccident INT NOT NULL,
-            FOREIGN KEY (idAccident) REFERENCES accident(id) ON DELETE CASCADE)      
+            idType INT NOT NULL,
+            date DATE NOT NULL,
+            hour INT NOT NULL,
+            name VARCHAR(50),
+            FOREIGN KEY (idType) REFERENCES type(id)
+         )
       `);
    },
-   insert: async (accident) => {
+   insert: async (booking) => {
       let sql = `
-         INSERT INTO accident(address, date, time, injured, dead)
+         INSERT INTO booking(idType, date, hour, name)
          VALUES (
-            '${accident.address}', 
-            '${accident.date}', 
-            '${accident.time}', 
-            ${accident.injured}, 
-            ${accident.dead})
+            ${booking.idType}, 
+            '${booking.date}', 
+            ${booking.hour}, 
+            '${booking.name}'
+            )
            `;
       const result = await executeQuery(sql);
       accident.plates.forEach(async (element) => {
@@ -59,21 +59,24 @@ const database = {
          await executeQuery(sql);
       });
    },
-   delete: (id) => {
+   delete: (id) => {//eliminare anche in type
       let sql = `
-        DELETE FROM accident
+        DELETE FROM booking
         WHERE id=${id}
            `;
       return executeQuery(sql);
    },
-   select: async () => {
+   select: async () => {//non è prevista una mappa////////////////////////////////////////////////////
       let sql = `
-        SELECT id, address, date, time, injured, dead FROM accident 
+        SELECT id, address, date, time, injured, dead
+        FROM accident 
            `;
       const result = await executeQuery(sql);
       await Promise.all(result.map(async (accident) => {
          sql = `
-            SELECT plate FROM plates WHERE idAccident=${accident.id} 
+            SELECT plate
+            FROM plates
+            WHERE idAccident=${accident.id} 
            `;
          const list = await executeQuery(sql);
          accident.plates = list.map(p => p.plate);
@@ -82,11 +85,11 @@ const database = {
    },
    drop: async () => {
       let sql = `
-            DROP TABLE IF EXISTS plates
+            DROP TABLE IF EXISTS type
            `;
       await executeQuery(sql);
       sql = `
-            DROP TABLE IF EXISTS accident
+            DROP TABLE IF EXISTS booking
            `;
       await executeQuery(sql);
    }
