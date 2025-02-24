@@ -1,18 +1,17 @@
 const tabella = document.getElementById("tabella");
 const precendente = document.getElementById("precedente");
 const successiva = document.getElementById("successiva");
-let starDay = 0;
 const navbar = document.getElementById("navbar");
 const formElement = document.getElementById("form");
 
 import {tableComponent} from './componenti/table.js';
 import {NavBarComponent} from './componenti/navbar.js';
 import {createForm} from './componenti/form.js';
-import {createMiddleware } from './componenti/middleware.js';
+import {createMiddleware} from './componenti/middleware.js';
 import {generatePubSub} from "./componenti/pubsub.js";
 
 
-
+let starDay = 0;
 fetch("conf.json").then(r => r.json()).then(conf => {
     const form = createForm(formElement);
     const table1 = tableComponent();
@@ -21,7 +20,7 @@ fetch("conf.json").then(r => r.json()).then(conf => {
     const middleware = createMiddleware();
     navBarComp.setParentElement(navbar);
 
-    pubsub.subscribe("carica-dati-list", (dati) => {
+    pubsub.subscribe("carica-dati-list", (data) => {
         form.setLabels(data);
         table1.setData(data); // Imposta i dati nel componente tabella
         table1.setParentElement(tabella);
@@ -29,7 +28,25 @@ fetch("conf.json").then(r => r.json()).then(conf => {
         console.log("Dati caricati sulla lista");
     });
 
-    
+    pubsub.subscribe("set-dati", (data) => {
+        middleware.add(data).then(
+        middleware.load().then(r =>{        
+            form.setLabels(r);
+            table1.setData(r);
+            table1.render();
+            console.log("set Dati sulla lista");
+        }
+        )
+    )
+    });
+
+    pubsub.subscribe("Tipo", (data) =>{
+        form.setType(data)
+        table1.setTipo(data);
+        table1.render()
+    })
+
+
 
     precendente.onclick = () => {
         starDay -= 7;
@@ -42,8 +59,9 @@ fetch("conf.json").then(r => r.json()).then(conf => {
         table1.start(starDay)
         table1.render();
     }
+
     navBarComp.render(form,table1);
-    form.render(table1,compFetch)
+    form.render(table1,middleware)
     /*setInterval(()=>{
         compFetch.getData().then(data => {
             form.setLabels(data);

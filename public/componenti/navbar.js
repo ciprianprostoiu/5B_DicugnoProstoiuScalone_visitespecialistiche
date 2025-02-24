@@ -8,7 +8,7 @@ export const NavBarComponent = (conf) => {
             // FUNZIONA CHE DETERMINA DOVE POSIZIONARE LA RENDER
             parentElement = pr;
         }
-        ,render: (form,table1) => {
+        ,render: (pubsub) => {
             // FUNZIONE CHE INIETTA DENTRO IL CONTAINER IL CSS
             let html = "";
             conf["tipologie"].forEach((tip,index) => {
@@ -25,9 +25,7 @@ export const NavBarComponent = (conf) => {
 
             document.querySelectorAll(".btn-check").forEach((radio) => {
                 radio.onclick = () => {
-                    form.setType(radio.value)//valore della scelta
-                    table1.setTipo(radio.value);
-                    table1.render()
+                    pubsub.publish("Tipo" , radio.value);
                 };
             });
 
