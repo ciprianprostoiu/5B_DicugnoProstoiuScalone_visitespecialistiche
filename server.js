@@ -25,7 +25,7 @@ app.post("/insert", async (req, res) => {
 
 
   if (!dato || !dato.idtype || !dato.date || !dato.hour || !dato.name) {
-    console.error("❌ Dati incompleti:", dato);
+    console.error("❌❌❌ Dati incompleti ❌❌❌:", dato);
     return res.status(400).json({ result: "ko", message: "Dati incompleti" });
   }
 
@@ -35,7 +35,7 @@ app.post("/insert", async (req, res) => {
     res.json({result: "ok"});
   } catch (e) {
 
-    console.error("❌ Errore durante l'inserimento:", e);
+    console.error("❌❌❌ Errore durante l'inserimento ❌❌❌:", e);
     res.status(500).json({result: "ko"});
   
   }
