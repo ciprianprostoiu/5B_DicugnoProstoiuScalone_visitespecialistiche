@@ -1,4 +1,4 @@
-export const createForm = (parentElement) => {
+export const createForm = (parentElement, pubsub) => {
     let dato = {};
     let callback = null;
     let tipo="Cardiologia";
@@ -21,6 +21,17 @@ export const createForm = (parentElement) => {
                 const data = document.querySelector("#data").value;
                 const ora = document.querySelector("#ora").value;
                 const nome = document.querySelector("#nome").value;
+                
+                //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                const dizTemp = {
+                    "data": data,
+                    "ora": ora,
+                    "nome": nome
+                }
+                // pubblico l'evento
+                pubsub.publish("InsertData", dizTemp);
+                //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                
                 const outputform = document.getElementById("outputform");
 
                 let date = new Date(data);

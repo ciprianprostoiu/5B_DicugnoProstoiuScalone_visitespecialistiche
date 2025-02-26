@@ -9,11 +9,13 @@ import {tableComponent} from './componenti/table.js';
 import {NavBarComponent} from './componenti/navbar.js';
 import {createForm} from './componenti/form.js';
 import {generateFetchComponent} from './componenti/fetch_component.js';
-//import { createMiddleware } from './componenti/middleware.js';
+import { generatePubSub } from './componenti/pubsub.js';
+import { createMiddleware } from './componenti/middleware.js';//
 
 
 fetch("conf.json").then(r => r.json()).then(conf => {
-    const form = createForm(formElement);
+    const pubsub = generatePubSub()
+    const form = createForm(formElement, pubsub);
     const table1 = tableComponent();
     const navBarComp = NavBarComponent(conf);
     const compFetch = generateFetchComponent()
@@ -47,3 +49,10 @@ fetch("conf.json").then(r => r.json()).then(conf => {
         });
     },300000)
 });
+
+//iscrivo all evento//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+const middleware = createMiddleware();
+pubsub.subscribe("InsertData", async (diz) => {
+    console.log(diz);
+    await middleware.add(diz)
+  });
