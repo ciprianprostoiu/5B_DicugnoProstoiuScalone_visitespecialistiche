@@ -9,7 +9,7 @@ export const createForm = (parentElement, pubsub) => {
         exportDiz: () => {
             
         },
-        render: (pubsub) => {
+        render: () => {
             //creazione input
             parentElement.innerHTML = 
                 `<div>Data<br/><input id="data" type="date" class="form-label form-control"/></div>` +

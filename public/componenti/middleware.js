@@ -1,4 +1,4 @@
-const createMiddleware = () => {
+export const createMiddleware = () => {
     return {
       load: async () => {
         const response = await fetch("/booking");
@@ -27,5 +27,3 @@ const createMiddleware = () => {
       }
     }
   }
-
-  export default createMiddleware;

@@ -6,6 +6,7 @@ const database = require("./database");
 database.createTable();
 
 app.use("/", express.static(path.join(__dirname, "public")));
+app.use('/node_modules', express.static(__dirname + '/node_modules'));
 app.post("/insert", async (req, res) => {
   const accident = req.body.accident;
   try {
@@ -24,7 +25,6 @@ app.delete('/delete/:id', async (req, res) => {
   res.json({result: "ok"});
 })
 const server = http.createServer(app);
-const port = 5600;
-server.listen(port, () => {
-  console.log("- server running on port: " + port);
+server.listen(5600, () => {
+  console.log("- server running on port: " + 5600);
 });

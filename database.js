@@ -57,22 +57,22 @@ const database = {
            `;
       return executeQuery(sql);
    },
-   select: async () => {//non è prevista una mappa////////////////////////////////////////////////////
+   select: async () => {
       let sql = `
-        SELECT id, address, date, time, injured, dead
-        FROM accident 
+        SELECT id, idType, date, hour, name
+        FROM booking 
            `;
       const result = await executeQuery(sql);
-      await Promise.all(result.map(async (accident) => {
-         sql = `
-            SELECT plate
-            FROM plates
-            WHERE idAccident=${accident.id} 
-           `;
-         const list = await executeQuery(sql);
-         accident.plates = list.map(p => p.plate);
-      }));
-      return result;
+      if(result==""){
+         result=[]
+      }
+      sql = `
+         SELECT id,name
+         FROM type
+      `;
+      const list = await executeQuery(sql);
+      
+      return result,list;
    },
    drop: async () => {
       let sql = `

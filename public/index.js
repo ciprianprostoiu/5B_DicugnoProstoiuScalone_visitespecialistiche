@@ -7,9 +7,6 @@ const formElement = document.getElementById("form");
 import {tableComponent} from './componenti/table.js';
 import {NavBarComponent} from './componenti/navbar.js';
 import {createForm} from './componenti/form.js';
-//import {generateFetchComponent} from './componenti/fetch_component.js';/////
-import { generatePubSub } from './componenti/pubsub.js';
-import { createMiddleware } from './componenti/middleware.js';////////////////
 import {createMiddleware} from './componenti/middleware.js';
 import {generatePubSub} from "./componenti/pubsub.js";
 
@@ -19,15 +16,19 @@ fetch("conf.json").then(r => r.json()).then(conf => {
     const pubsub = generatePubSub()
     const form = createForm(formElement, pubsub);
     const table1 = tableComponent();
-    const navBarComp = NavBarComponent();
+    const navBarComp = NavBarComponent(pubsub);
     const middleware = createMiddleware();
     navBarComp.setParentElement(navbar);
 
     pubsub.subscribe("carica-dati-list", (data) => {
-        form.setLabels(data);
-        table1.setData(data); // Imposta i dati nel componente tabella
+        console.log(data)
+        navBarComp.setData(data);
+        navBarComp.render();
+        form.setLabels(data[0]);
+        table1.setData(data[0]);
         table1.setParentElement(tabella);
         table1.render(starDay)
+        navBarComp.render(form,table1);
         console.log("Dati caricati sulla lista");
     });
 
@@ -43,11 +44,16 @@ fetch("conf.json").then(r => r.json()).then(conf => {
     )
     });
 
-    pubsub.subscribe("Tipo", (data) =>{
+    pubsub.subscribe("Tipo-elemento", (data) =>{
         form.setType(data)
         table1.setTipo(data);
         table1.render()
     })
+
+    pubsub.subscribe("InsertData", async (diz) => {
+        console.log(diz);
+        await middleware.add(diz)
+      });
 
 
 
@@ -63,7 +69,6 @@ fetch("conf.json").then(r => r.json()).then(conf => {
         table1.render();
     }
 
-    navBarComp.render(form,table1);
     form.render(table1,middleware)
     /*setInterval(()=>{
         compFetch.getData().then(data => {
@@ -73,11 +78,8 @@ fetch("conf.json").then(r => r.json()).then(conf => {
             
         });
     },300000)*/
-});
 
-//iscrivo all evento//////////////////////////////////////////////////////////////////////////////////////////////////////////////
-const middleware = createMiddleware();
-pubsub.subscribe("InsertData", async (diz) => {
-    console.log(diz);
-    await middleware.add(diz)
-  });
+      middleware.load().then(
+        r => pubsub.publish("carica-dati-list", r)        
+    );
+});
