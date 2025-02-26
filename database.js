@@ -43,7 +43,7 @@ const database = {
          INSERT INTO booking(idType, date, hour, name)
          VALUES ('${booking.idType}','${booking.date}', '${booking.hour}', '${booking.name}')
            `;
-      console.log("rrrr:", booking)
+      console.log("🔥   :", booking)
       await executeQuery(sql);
    },
    delete: (id) => {//eliminare anche in type

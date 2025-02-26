@@ -2,6 +2,14 @@ const express = require("express");
 const http = require('http');
 const path = require('path');
 const app = express();
+
+//middleware per leggere JSON nel body della richiesta
+app.use(express.json());
+
+
+//middleware per leggere dati URL-encoded (necessario se il form invia dati come "application/x-www-form-urlencoded")
+app.use(express.urlencoded({ extended: true }));
+
 const database = require("./database");
 database.createTable();
 
@@ -9,7 +17,7 @@ app.use("/", express.static(path.join(__dirname, "public")));
 app.use('/node_modules', express.static(__dirname + '/node_modules'));
 app.post("/insert", async (req, res) => {
   const dato = req.body
-  console.log("rrrr:" ,dato)
+  console.log("DATOOO:   " ,dato)
   try {
     await database.insert(dato);
     res.json({result: "ok"});
