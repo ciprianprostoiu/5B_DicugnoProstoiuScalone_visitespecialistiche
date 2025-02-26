@@ -8,9 +8,10 @@ database.createTable();
 app.use("/", express.static(path.join(__dirname, "public")));
 app.use('/node_modules', express.static(__dirname + '/node_modules'));
 app.post("/insert", async (req, res) => {
-  const accident = req.body.accident;
+  const dato = req.body
+  console.log("rrrr:" ,dato)
   try {
-    await database.insert(accident);
+    await database.insert(dato);
     res.json({result: "ok"});
   } catch (e) {
     res.status(500).json({result: "ko"});

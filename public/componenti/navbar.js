@@ -20,9 +20,9 @@ export const NavBarComponent = (pubsub) => {
                 let radioId = "radio" + tip.id;
                 if (index === 0) {
                     //PER IL CHECKED [SE è IL PRIMO ALLORA SARà CHECKED]
-                    html += template.replace(/#ID/g, radioId).replace("#CAT", tip.name).replace("#TIPO", tip.name) .replace("#CHECKED", "checked");
+                    html += template.replace(/#ID/g, radioId).replace("#CAT", tip.name).replace("#TIPO", tip.id) .replace("#CHECKED", "checked");
                 } else {
-                    html += template.replace(/#ID/g,radioId) .replace("#CAT", tip.name).replace("#TIPO", tip.name).replace("#CHECKED", "");
+                    html += template.replace(/#ID/g,radioId) .replace("#CAT", tip.name).replace("#TIPO", tip.id).replace("#CHECKED", "");
                 }
             });
             parentElement.innerHTML = html;

@@ -1,7 +1,7 @@
 export const createForm = (parentElement, pubsub) => {
     let dato = {};
     let callback = null;
-    let tipo="Cardiologia";
+    let tipo=1;
     return {
         setLabels: (labels) => { dato = labels; }, 
         onsubmit: (callbackInput) => { callback = callbackInput; },
@@ -24,9 +24,10 @@ export const createForm = (parentElement, pubsub) => {
                 
                 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
                 const dizTemp = {
-                    "data": data,
-                    "ora": ora,
-                    "nome": nome
+                    "idType": tipo,
+                    "date": data,
+                    "hour": ora,
+                    "name": nome
                 }
                 // pubblico l'evento
                 pubsub.publish("InsertData", dizTemp);

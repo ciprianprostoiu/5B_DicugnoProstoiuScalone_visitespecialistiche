@@ -41,13 +41,9 @@ const database = {
    insert: async (booking) => {
       let sql = `
          INSERT INTO booking(idType, date, hour, name)
-         VALUES (
-            ${booking.idType}, 
-            '${booking.date}', 
-            ${booking.hour}, 
-            '${booking.name}'
-            )
+         VALUES ('${booking.idType}','${booking.date}', '${booking.hour}', '${booking.name}')
            `;
+      console.log("rrrr:", booking)
       await executeQuery(sql);
    },
    delete: (id) => {//eliminare anche in type
@@ -62,7 +58,7 @@ const database = {
         SELECT id, idType, date, hour, name
         FROM booking 
            `;
-      const result = await executeQuery(sql);
+      let result = await executeQuery(sql);
       if(result==""){
          result=[]
       }
