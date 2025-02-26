@@ -9,7 +9,7 @@ export const createForm = (parentElement, pubsub) => {
         exportDiz: () => {
             
         },
-        render: (table1,compFetch) => {
+        render: (pubsub) => {
             //creazione input
             parentElement.innerHTML = 
                 `<div>Data<br/><input id="data" type="date" class="form-label form-control"/></div>` +
@@ -50,14 +50,8 @@ export const createForm = (parentElement, pubsub) => {
                     else{
                         dato[chiave] = nome;
                         outputform.innerHTML = "OK";
-
-                        compFetch.setData(dato).then(data => {
-                            compFetch.getData().then(data=>{
-                                dato=data;
-                                table1.setData(data)
-                                table1.render()
-                            })
-                        })}
+                        pubsub.publish("set-dati" , (dato[chiave],dato));
+                    }
                 }
                 document.querySelector("#data").value="";
                 document.querySelector("#ora").value="8";

@@ -48,16 +48,7 @@ const database = {
             '${booking.name}'
             )
            `;
-      const result = await executeQuery(sql);
-      accident.plates.forEach(async (element) => {
-         sql = `
-            INSERT INTO plates(plate, idAccident) 
-            VALUES (
-               '${element}', 
-               ${result.insertId})
-         `;
-         await executeQuery(sql);
-      });
+      await executeQuery(sql);
    },
    delete: (id) => {//eliminare anche in type
       let sql = `
