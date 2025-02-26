@@ -39,11 +39,13 @@ const database = {
       `);
    },
    insert: async (booking) => {
+
+      console.log("🔥 Ricevuto booking:", booking);
+
       let sql = `
          INSERT INTO booking(idType, date, hour, name)
          VALUES ('${booking.idType}','${booking.date}', '${booking.hour}', '${booking.name}')
            `;
-      console.log("🔥   :", booking)
       await executeQuery(sql);
    },
    delete: (id) => {//eliminare anche in type

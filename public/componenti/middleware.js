@@ -12,14 +12,14 @@ export const createMiddleware = () => {
         const json = await response.json();
         return json;
       },
-      add: async (accident) => {
+      add: async (booking) => {
         const response = await fetch("/insert", {
             method: 'POST',
             headers: {
                 "content-type": "application/json"
             },
             body: JSON.stringify({
-                accident: accident
+              booking: booking
             })
         });
         const json = await response.json();
