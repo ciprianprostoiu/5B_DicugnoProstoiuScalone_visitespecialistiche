@@ -26,11 +26,34 @@ export const createForm = (parentElement, pubsub) => {
                 const dizTemp = {
                     "idType": tipo,
                     "date": data,
-                    "hour": ora,
+                    "hour": Number(ora),
                     "name": nome
                 }
                 // pubblico l'evento
                 pubsub.publish("InsertData", dizTemp);
+
+                console.log("Dati inviati al server:", dizTemp);
+                fetch("/insert", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(dizTemp)
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log("Risposta dal server:", data);
+                    if (data.result === "ok") {
+                        outputform.innerHTML = "OK";
+                    } else {
+                        outputform.innerHTML = "KO";
+                    }
+                })
+                .catch(error => {
+                    console.error("Errore nell'invio dei dati:", error);
+                    outputform.innerHTML = "Errore!";
+                });
+                
                 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
                 
                 const outputform = document.getElementById("outputform");

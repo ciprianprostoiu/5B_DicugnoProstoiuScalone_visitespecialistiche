@@ -40,7 +40,7 @@ const database = {
    },
    insert: async (booking) => {
 
-      console.log("🔥 Ricevuto booking:", booking);
+      console.log("BOOKING RICEVUTO:", booking);
 
       let sql = `
          INSERT INTO booking(idType, date, hour, name)
