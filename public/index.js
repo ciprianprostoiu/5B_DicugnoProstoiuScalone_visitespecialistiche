@@ -53,14 +53,15 @@ fetch("conf.json").then(r => r.json()).then(conf => {
 
     pubsub.subscribe("InsertData", async (diz) => {
         console.log(diz);
-        await middleware.add(diz).then(
-            middleware.load().then(r =>{         
-                form.setLabels(r);
-                table1.setData(r);
+        await middleware.add(diz)
+        await middleware.load().then(r =>{   
+                console.log(r)      
+                form.setLabels(r.result);
+                table1.setData(r.result);
                 table1.render();
                 console.log("set Dati sulla lista");
                 console.log(r)
-            })
+            }
         )
 
       });
@@ -80,14 +81,6 @@ fetch("conf.json").then(r => r.json()).then(conf => {
     }
 
     form.render(table1,middleware)
-    /*setInterval(()=>{
-        compFetch.getData().then(data => {
-            form.setLabels(data);
-            table1.setData(data); // Imposta i dati nel componente tabella
-            table1.render(starDay);// Renderizza la tabella con i dati recuperati
-            
-        });
-    },300000)*/
 
       middleware.load().then(
         r => pubsub.publish("carica-dati-list", r)        

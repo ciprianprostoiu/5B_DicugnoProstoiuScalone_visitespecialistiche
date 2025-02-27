@@ -22,39 +22,6 @@ export const createForm = (parentElement, pubsub) => {
                 const ora = document.querySelector("#ora").value;
                 const nome = document.querySelector("#nome").value;
                 
-                //////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                const dizTemp = {
-                    "idType": tipo,
-                    "date": data,
-                    "hour": Number(ora),
-                    "name": nome
-                }
-                // pubblico l'evento
-                pubsub.publish("InsertData", dizTemp);
-
-                console.log("Dati inviati al server:", dizTemp);
-                fetch("/insert", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify(dizTemp)
-                })
-                .then(response => response.json())
-                .then(data => {
-                    console.log("Risposta dal server:", data);
-                    if (data.result === "ok") {
-                        outputform.innerHTML = "OK";
-                    } else {
-                        outputform.innerHTML = "KO";
-                    }
-                })
-                .catch(error => {
-                    console.error("Errore nell'invio dei dati:", error);
-                    outputform.innerHTML = "Errore!";
-                });
-                
-                //////////////////////////////////////////////////////////////////////////////////////////////////////////////
                 
                 const outputform = document.getElementById("outputform");
 
@@ -65,18 +32,58 @@ export const createForm = (parentElement, pubsub) => {
                 } else {
                     // AGGIUNTA DELLA DATA NEL DIZIONARIO
                     const datasenzatrattini = data.split("-").join("");
+                    console.log(datasenzatrattini)
                     const result={}
-                    let chiave = tipo+"-"+datasenzatrattini+"-"+ora;
-                    if(chiave in dato){
+                    let booking;
+                    try{
+                            booking = dato.find(b => 
+                            b.idType == tipo &&
+                            b.date.split("T")[0] === datasenzatrattini && // Estrae solo YYYY-MM-DD
+                            b.hour == ora
+                        );
+                    }catch{console.log("err")}
+
+                    if(booking){
                         outputform.innerHTML="KO";
-                        
                     }
                     else{
-                        dato[chiave] = nome;
                         outputform.innerHTML = "OK";
-                        pubsub.publish("set-dati" , (dato[chiave],dato));
+                        //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                        const dizTemp = {
+                            "idType": tipo,
+                            "date": data,
+                            "hour": Number(ora),
+                            "name": nome
+                        }
+                        // pubblico l'evento
+                        pubsub.publish("InsertData", dizTemp);
+
+                        console.log("Dati inviati al server:", dizTemp);
+                        fetch("/insert", {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json"
+                            },
+                            body: JSON.stringify(dizTemp)
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            console.log("Risposta dal server:", data);
+                            if (data.result === "ok") {
+                                outputform.innerHTML = "OK";
+                            } else {
+                                outputform.innerHTML = "KO";
+                            }
+                        })
+                        .catch(error => {
+                            console.error("Errore nell'invio dei dati:", error);
+                            outputform.innerHTML = "Errore!";
+                        });
+                        
+                        //////////////////////////////////////////////////////////////////////////////////////////////////////////////
                     }
                 }
+
                 document.querySelector("#data").value="";
                 document.querySelector("#ora").value=8;
                 document.querySelector("#nome").value="";

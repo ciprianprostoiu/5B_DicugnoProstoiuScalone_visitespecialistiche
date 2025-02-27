@@ -15,7 +15,7 @@ export const tableComponent = () => {
     let parentElement;
 
     return {
-        setData: (dato) =>{data=dato},
+        setData: (dato) =>{data=dato; console.log(data)},
         setParentElement: (pr) => {
             parentElement = pr;
         },
@@ -29,6 +29,14 @@ export const tableComponent = () => {
                 let y = date.getFullYear();
                 return y + "-" + m + "-" + d;
             };
+            const exportData2 = (date) => {
+                // FUNZIONE CHE FORMATTA LA DATA
+                let d = (date.getDate()-1).toString().padStart(2, '0'); // SE LEN MINORE DI 2 AGGIUNGE "0"
+                let m = (date.getMonth() + 1).toString().padStart(2, '0');
+                let y = date.getFullYear();
+                return y + "-" + m + "-" + d;
+            };
+
 
             const lisSett = ["Lunedì", "Martedì", "Mercoledì", "Giovedì", "Venerdì"];
             const ore = ["8", "9", "10", "11", "12"];
@@ -60,13 +68,19 @@ export const tableComponent = () => {
                 html += `<tr class ="tbl1">`+"<td>"+ ora +"</td>";
                 for (let i = 0; i < lisSett.length; i++) {
                     let giorno=exportData(date)
-                    console.log(giorno)
+                    let giorno2= exportData2(date)
+
                     // Trova se esiste una prenotazione per questo giorno e ora
-                    let booking = data.find(b => 
-                        b.idType == tipo &&
-                        b.date.split("T")[0] === giorno && // Estrae solo YYYY-MM-DD
-                        b.hour == ora
-                    );
+                    let booking;
+                    try{
+                            booking = data.find(b => 
+                            b.idType == tipo &&
+                            b.date.split("T")[0] === giorno2 && // Estrae solo YYYY-MM-DD
+                            b.hour == ora
+                        );
+                        console.log(booking)
+                    }catch{console.log("err")}
+
                     if (booking) {
                         // se fa parte del dizionario stampa
                         html += `<td class="table-info">` + booking.name+ "</td>"; // Inserisci il nome della prenotazione
