@@ -12,7 +12,7 @@ export const createForm = (parentElement, pubsub) => {
         render: () => {
             const exportData = (date) => {
                 // FUNZIONE CHE FORMATTA LA DATA
-                let d = date.getDate().toString().padStart(2, '0'); // SE LEN MINORE DI 2 AGGIUNGE "0"
+                let d = (date.getDate()-1).toString().padStart(2, '0'); // SE LEN MINORE DI 2 AGGIUNGE "0"
                 let m = (date.getMonth() + 1).toString().padStart(2, '0');
                 let y = date.getFullYear();
                 return y + "-" + m + "-" + d;
