@@ -1,6 +1,6 @@
 export const tableComponent = () => {
     let data={}
-    let tipo="Cardiologia";
+    let tipo=1;
     let PrecedenteSuccessiva=0
     let templateGiorni = `
         <tr class="tbl1">
@@ -59,11 +59,17 @@ export const tableComponent = () => {
             ore.forEach(ora => {
                 html += `<tr class ="tbl1">`+"<td>"+ ora +"</td>";
                 for (let i = 0; i < lisSett.length; i++) {
-                    let giorno=exportData(date).split("-").join("");
-                    let chiave= tipo +"-"+giorno+"-"+ora;
-                    if (chiave in data) {
+                    let giorno=exportData(date)
+                    console.log(giorno)
+                    // Trova se esiste una prenotazione per questo giorno e ora
+                    let booking = data.find(b => 
+                        b.idType == tipo &&
+                        b.date.split("T")[0] === giorno && // Estrae solo YYYY-MM-DD
+                        b.hour == ora
+                    );
+                    if (booking) {
                         // se fa parte del dizionario stampa
-                        html += `<td class="table-info">` + data[chiave]+ "</td>"; // Inserisci il nome della prenotazione
+                        html += `<td class="table-info">` + booking.name+ "</td>"; // Inserisci il nome della prenotazione
                     } else {
                         // cella vuota
                         html += `<td></td>`; // Celle vuote o con contenuto da aggiungere

@@ -66,6 +66,7 @@ function formatDate(dateStr) {
 
 app.get('/booking', async (req, res) => {
     const list = await database.select();
+    console.log(list)
     res.json(list);
 });
 

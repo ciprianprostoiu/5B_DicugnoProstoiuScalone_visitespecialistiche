@@ -61,16 +61,13 @@ const database = {
         FROM booking 
            `;
       let result = await executeQuery(sql);
-      if(result==""){
-         result=[]
-      }
+      console.log("rrrrrr:",result)
       sql = `
          SELECT id,name
          FROM type
       `;
       const list = await executeQuery(sql);
-      
-      return result,list;
+      return {result,list};
    },
    drop: async () => {
       let sql = `

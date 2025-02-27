@@ -22,10 +22,10 @@ fetch("conf.json").then(r => r.json()).then(conf => {
 
     pubsub.subscribe("carica-dati-list", (data) => {
         console.log(data)
-        navBarComp.setData(data);
+        navBarComp.setData(data.list);
         navBarComp.render();
-        form.setLabels(data[0]);
-        table1.setData(data[0]);
+        form.setLabels(data.result);
+        table1.setData(data.result);
         table1.setParentElement(tabella);
         table1.render(starDay)
         navBarComp.render(form,table1);
@@ -53,7 +53,16 @@ fetch("conf.json").then(r => r.json()).then(conf => {
 
     pubsub.subscribe("InsertData", async (diz) => {
         console.log(diz);
-        await middleware.add(diz)
+        await middleware.add(diz).then(
+            middleware.load().then(r =>{         
+                form.setLabels(r);
+                table1.setData(r);
+                table1.render();
+                console.log("set Dati sulla lista");
+                console.log(r)
+            })
+        )
+
       });
 
 
