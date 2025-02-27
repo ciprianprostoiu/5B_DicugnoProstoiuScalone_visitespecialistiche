@@ -55,7 +55,7 @@ export const createForm = (parentElement, pubsub) => {
                     }
                 }
                 document.querySelector("#data").value="";
-                document.querySelector("#ora").value="8";
+                document.querySelector("#ora").value=8;
                 document.querySelector("#nome").value="";
 
                 }

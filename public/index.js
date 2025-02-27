@@ -34,11 +34,12 @@ fetch("conf.json").then(r => r.json()).then(conf => {
 
     pubsub.subscribe("set-dati", (data) => {
         middleware.add(data).then(
-        middleware.load().then(r =>{        
+        middleware.load().then(r =>{         
             form.setLabels(r);
             table1.setData(r);
             table1.render();
             console.log("set Dati sulla lista");
+            console.log(r)
         }
         )
     )
